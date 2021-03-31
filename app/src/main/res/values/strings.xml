@@ -4,4 +4,9 @@
     <string name="title_login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+
+    <string name="empty_string_error_message">Input is empty</string>
+    <string name="invalid_email_error_message">Email is incorrect</string>
+    <string name="invalid_min_length_error_message">Input should be at least %d signs long</string>
+    <string name="invalid_password_error_message">Password should contain at least 1 lowercase letter, 1 uppercase letter and 1 digit</string>
 </resources>
