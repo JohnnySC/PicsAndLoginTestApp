@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PicsAndLoginTestApp</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_pics">Pictures</string>
+    <string name="title_login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>
