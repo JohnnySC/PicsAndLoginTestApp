@@ -42,23 +42,28 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     //endregion
 
     fun login(email: String, password: String) {
+        var success = true
         for (validator in emailValidators) {
             if (!validator.isValid(email)) {
                 emailState.value = InputState(true, validator.errorMessage)
+                success = false
                 break
             }
         }
         for (validator in passwordValidators) {
             if (!validator.isValid(password)) {
                 passwordState.value = InputState(true, validator.errorMessage)
+                success = false
                 break
             }
         }
-        progressState.value = true
-        //todo interactor login
-        //if failured
-        messageState.value = "Error happened or success"
-        progressState.value = false
+        if (success) {
+            progressState.value = true
+            //todo interactor login
+            //if failured
+            messageState.value = "Error happened or success"
+            progressState.value = false
+        }
 
     }
 
