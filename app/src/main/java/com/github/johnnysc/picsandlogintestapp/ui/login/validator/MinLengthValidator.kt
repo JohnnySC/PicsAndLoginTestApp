@@ -1,5 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.ui.login.validator
 
+import com.github.johnnysc.picsandlogintestapp.core.UiValidator
+
 /**
  * Валидатор минимальной длины
  *

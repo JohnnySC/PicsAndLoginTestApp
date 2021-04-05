@@ -1,5 +1,8 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics
 
+import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.FullSizeError
+import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.FullSizeLoader
+import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicUiModelType
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.github.johnnysc.picsandlogintestapp.ui.login.validator
+package com.github.johnnysc.picsandlogintestapp.core
 
 /**
  * Валидатор юай слоя (для полей ввода)
@@ -7,6 +7,9 @@ package com.github.johnnysc.picsandlogintestapp.ui.login.validator
  **/
 interface UiValidator {
 
+    /**
+     * Сообщение об ошибке
+     */
     val errorMessage: String
 
     /**

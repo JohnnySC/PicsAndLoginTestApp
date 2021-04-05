@@ -1,11 +1,15 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics
 
+import com.github.johnnysc.picsandlogintestapp.core.Mapper
+import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.*
+
 /**
  * Мапим данные логики к данным юай слоя
  *
  * @author Asatryan on 01.04.21
  **/
-class PicsUiMapper : Mapper<List<PicUiModel>, List<PicItem>> {
+class PicsUiMapper :
+    Mapper<List<PicUiModel>, List<PicItem>> {
 
     override fun map(source: List<PicItem>): List<PicUiModel> {
         val result = ArrayList<PicUiModel>()
@@ -16,7 +20,10 @@ class PicsUiMapper : Mapper<List<PicUiModel>, List<PicItem>> {
                 result.addAll(
                     source.map {
                         it as PicItem.Base
-                        Basic(it.text, it.url)
+                        Basic(
+                            it.text,
+                            it.url
+                        )
                     }
                 )
                 result.add(BottomLoader)
@@ -24,7 +31,12 @@ class PicsUiMapper : Mapper<List<PicUiModel>, List<PicItem>> {
             source.last() is PicItem.Error -> {
                 for (item in source) {
                     if (item is PicItem.Base)
-                        result.add(Basic(item.text, item.url))
+                        result.add(
+                            Basic(
+                                item.text,
+                                item.url
+                            )
+                        )
                 }
                 result.add(BottomError)
             }

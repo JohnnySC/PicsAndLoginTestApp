@@ -1,4 +1,4 @@
-package com.github.johnnysc.picsandlogintestapp.ui.pics
+package com.github.johnnysc.picsandlogintestapp.core
 
 /**
  * Маппер для преобразования одних данных к другим
@@ -8,7 +8,7 @@ package com.github.johnnysc.picsandlogintestapp.ui.pics
  *
  * @author Asatryan on 01.04.21
  **/
-interface Mapper<R,S> {
+interface Mapper<R, S> {
 
-    fun map(source: S) : R
+    fun map(source: S): R
 }

@@ -1,5 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.ui.login.validator
 
+import com.github.johnnysc.picsandlogintestapp.core.UiValidator
+
 /**
  * Валидатор пароля: текст должен содержать минимум 1 букву в нижнем регистре, 1 букву в верхнем регистре и 1 цифру
  *

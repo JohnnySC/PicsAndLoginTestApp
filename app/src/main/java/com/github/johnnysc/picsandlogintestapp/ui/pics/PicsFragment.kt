@@ -1,7 +1,6 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.johnnysc.picsandlogintestapp.R
+import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicsAdapter
+import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicsClickListener
 
 /**
+ * Экран со списком изображений
+ *
  * @author Asatryan on 31.03.21
  */
-class PicsFragment : Fragment(), PicsClickListener {
+class PicsFragment : Fragment(),
+    PicsClickListener {
 
     private lateinit var picsViewModel: PicsViewModel
 
@@ -35,11 +39,8 @@ class PicsFragment : Fragment(), PicsClickListener {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (picsViewModel.loadMoreData(layoutManager.findLastVisibleItemPosition())) {
-                    Handler().postDelayed({
-                        picsViewModel.loadMoreData()
-                    }, 3000)//imitate network delay
-                }
+                if (picsViewModel.loadMoreData(layoutManager.findLastVisibleItemPosition()))
+                    picsViewModel.loadData()
             }
         })
 
@@ -50,21 +51,15 @@ class PicsFragment : Fragment(), PicsClickListener {
         return root
     }
 
-
     override fun loadData() {
-        Handler().postDelayed({
-            picsViewModel.loadData()
-        }, 5000)//imitate network delay
+        picsViewModel.loadData()
     }
 
     override fun tryLoadDataAgain() {
-        picsViewModel.init()
+        picsViewModel.loadData()
     }
 
     override fun tryLoadMoreDataAgain() {
-        picsViewModel.init()
-        Handler().postDelayed({
-            picsViewModel.loadMoreData()
-        }, 3000)//imitate network delay
+        picsViewModel.loadData()
     }
 }

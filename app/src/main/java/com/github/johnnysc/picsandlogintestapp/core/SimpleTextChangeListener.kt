@@ -1,4 +1,4 @@
-package com.github.johnnysc.picsandlogintestapp.ui.login
+package com.github.johnnysc.picsandlogintestapp.core
 
 import android.text.Editable
 import android.text.TextWatcher
