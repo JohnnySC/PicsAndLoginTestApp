@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.github.johnnysc.picsandlogintestapp.R
 import com.github.johnnysc.picsandlogintestapp.core.SimpleTextChangeListener
 import com.google.android.material.snackbar.Snackbar
@@ -19,15 +19,13 @@ import com.google.android.material.textfield.TextInputLayout
  */
 class LoginFragment : Fragment() {
 
-    private lateinit var loginViewModel: LoginViewModel
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        loginViewModel =
-            ViewModelProvider(this).get(LoginViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_login, container, false)
 
         val emailTextInputLayout: TextInputLayout = root.findViewById(R.id.emailAddressTextInputLayout)

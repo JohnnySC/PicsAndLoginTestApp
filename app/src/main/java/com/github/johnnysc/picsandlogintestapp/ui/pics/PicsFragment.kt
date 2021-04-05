@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.johnnysc.picsandlogintestapp.R
@@ -21,15 +21,13 @@ import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicsClickListener
 class PicsFragment : Fragment(),
     PicsClickListener {
 
-    private lateinit var picsViewModel: PicsViewModel
+    private val picsViewModel by viewModels<PicsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        picsViewModel =
-            ViewModelProvider(this).get(PicsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_pics, container, false)
         val recyclerView = root.findViewById<RecyclerView>(R.id.picsRecyclerView)
         val adapter = PicsAdapter(this)
@@ -47,7 +45,6 @@ class PicsFragment : Fragment(),
         picsViewModel.dataState.observe(viewLifecycleOwner, Observer {
             adapter.setData(it)
         })
-        picsViewModel.init()
         return root
     }
 

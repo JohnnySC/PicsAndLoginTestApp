@@ -27,7 +27,7 @@ class PicsViewModel(app:Application) : AndroidViewModel(app) {
     /**
      * Отображаем начальное состояние экрана
      */
-    fun init() {
+    init {
         dataState.value = mapper.map(interactor.getInitialData())
     }
 
