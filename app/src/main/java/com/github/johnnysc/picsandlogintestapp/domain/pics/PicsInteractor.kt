@@ -1,7 +1,5 @@
 package com.github.johnnysc.picsandlogintestapp.domain.pics
 
-import com.github.johnnysc.picsandlogintestapp.ui.pics.PicItem
-
 /**
  * Интерактор для изображений
  *

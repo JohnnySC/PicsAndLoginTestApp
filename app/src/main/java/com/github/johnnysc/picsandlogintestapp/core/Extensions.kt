@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
+import com.github.johnnysc.picsandlogintestapp.R
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,6 +26,7 @@ fun ImageView.load(url: String) {
     Picasso.get().load(url)
         .centerInside()
         .resize(width / 2, width / 4)
+        .error(R.mipmap.ic_launcher)
         .onlyScaleDown()
         .into(this)
 }

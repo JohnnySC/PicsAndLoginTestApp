@@ -2,4 +2,6 @@
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_big">48dp</dimen>
+    <dimen name="pic_card_view_height">300dp</dimen>
+    <dimen name="pic_height">240dp</dimen>
 </resources>

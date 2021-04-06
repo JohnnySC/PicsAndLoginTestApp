@@ -3,8 +3,12 @@ package com.github.johnnysc.picsandlogintestapp.ui.login
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.picsandlogintestapp.R
+import com.github.johnnysc.picsandlogintestapp.ThisApp
 import com.github.johnnysc.picsandlogintestapp.ui.login.validator.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * @author Asatryan on 31.03.21
@@ -39,6 +43,8 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             PasswordValidator(app.getString(R.string.invalid_password_error_message))
         )
     }
+    private val interactor = (app as ThisApp).loginInteractor
+    private val mapper = WeatherUiMapper((app as ThisApp).resourceManager)
     //endregion
 
     fun login(email: String, password: String) {
@@ -59,12 +65,12 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
         }
         if (success) {
             progressState.value = true
-            //todo interactor login
-            //if failured
-            messageState.value = "Error happened or success"
-            progressState.value = false
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = interactor.login()
+                messageState.postValue(mapper.map(result).description)
+                progressState.postValue(false)
+            }
         }
-
     }
 
     fun clearEmailError() {

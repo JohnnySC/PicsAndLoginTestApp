@@ -2,7 +2,6 @@ package com.github.johnnysc.picsandlogintestapp.domain.pics
 
 import com.github.johnnysc.picsandlogintestapp.core.Mapper
 import com.github.johnnysc.picsandlogintestapp.data.pics.PicDTO
-import com.github.johnnysc.picsandlogintestapp.ui.pics.PicItem
 
 /**
  * Мапим данные с сервера к данным бизнес логики

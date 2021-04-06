@@ -1,6 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics
 
 import com.github.johnnysc.picsandlogintestapp.core.Mapper
+import com.github.johnnysc.picsandlogintestapp.domain.pics.PicItem
 import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.*
 
 /**
@@ -43,9 +44,4 @@ class PicsUiMapper :
         }
         return result
     }
-}
-
-sealed class PicItem {
-    data class Base(val text: String, val url: String) : PicItem()
-    object Error : PicItem()
 }

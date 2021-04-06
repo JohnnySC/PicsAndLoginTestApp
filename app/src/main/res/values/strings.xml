@@ -12,4 +12,7 @@
     <string name="try_again">try again</string>
     <string name="error_while_loading_message">Error occurred while loading data</string>
     <string name="load_more_data">Load more data</string>
+    <string name="generic_error_message">Something went wrong</string>
+    <string name="weather_description">Погода сегодня: %s, температура - %s, ощущается как %s</string>
+    <string name="logo_url"><![CDATA[https://drive.google.com/u/0/uc?id=1fJGLqz7ynMLSiCiIZvFYuweW_Tc0wO8m&export=download]]></string>
 </resources>

@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="@dimen/pic_card_view_height"
     android:layout_margin="@dimen/margin_medium">
 
     <LinearLayout
@@ -13,7 +13,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="@dimen/pic_height"
             android:layout_margin="@dimen/margin_small">
 
             <ImageView
