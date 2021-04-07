@@ -20,7 +20,7 @@ class PicsViewModel(app:Application) : AndroidViewModel(app) {
 
     private val mapper = PicsUiMapper()
 
-    private val interactor = (app as ThisApp).picsInteractor
+    private val interactor = (app as ThisApp).getPicsInteractor()
 
     private var lastVisibleItemPos = -1
 

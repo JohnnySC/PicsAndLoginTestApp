@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.picsandlogintestapp.R
 import com.github.johnnysc.picsandlogintestapp.ThisApp
+import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItem
 import com.github.johnnysc.picsandlogintestapp.ui.login.validator.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     val emailState = MutableLiveData<InputState>()
     val passwordState = MutableLiveData<InputState>()
     val progressState = MutableLiveData<Boolean>()
-    val messageState = MutableLiveData<String>()
+    val messageState = MutableLiveData<WeatherItem>()
 
     //region private fields
     private val passwordMinLength = 6
@@ -43,8 +44,9 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             PasswordValidator(app.getString(R.string.invalid_password_error_message))
         )
     }
-    private val interactor = (app as ThisApp).loginInteractor
-    private val mapper = WeatherUiMapper((app as ThisApp).resourceManager)
+    private val interactor by lazy {
+        (app as ThisApp).getLoginInteractor()
+    }
     //endregion
 
     fun login(email: String, password: String) {
@@ -67,7 +69,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             progressState.value = true
             viewModelScope.launch(Dispatchers.IO) {
                 val result = interactor.login()
-                messageState.postValue(mapper.map(result).description)
+                messageState.postValue(result)
                 progressState.postValue(false)
             }
         }

@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.github.johnnysc.picsandlogintestapp.R
 import com.github.johnnysc.picsandlogintestapp.core.SimpleTextChangeListener
 import com.github.johnnysc.picsandlogintestapp.core.load
+import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -78,7 +79,14 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.messageState.observe(viewLifecycleOwner, Observer {
-            Snackbar.make(progressBar, it, Snackbar.LENGTH_SHORT).show()
+            val message = if (it is WeatherItem.Basic) String.format(
+                getString(R.string.weather_description),
+                it.description,
+                it.temp,
+                it.feelsLike
+            ) else
+                getString(R.string.generic_error_message)
+            Snackbar.make(progressBar, message, Snackbar.LENGTH_SHORT).show()
         })
 
         return root

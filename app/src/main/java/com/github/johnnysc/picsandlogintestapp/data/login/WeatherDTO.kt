@@ -8,15 +8,13 @@ import com.google.gson.annotations.SerializedName
  * @author Asatryan on 06.04.21
  **/
 data class WeatherDTO(
-    @SerializedName("weather") val weatherInnerDTO: List<WeatherInnerDTO>
-)
-
-data class WeatherInnerDTO(
-    @SerializedName("description") val description: String,
+    @SerializedName("weather") val weatherInnerDTO: List<WeatherInnerDTO>,
     @SerializedName("main") val main: WeatherMainInfoDTO
 )
 
+data class WeatherInnerDTO(@SerializedName("description") val description: String)
+
 data class WeatherMainInfoDTO(
-    @SerializedName("temp") val temp: Double,
-    @SerializedName("feels_like") val feelsLike: Double
+    @SerializedName("temp") val temp: Float,
+    @SerializedName("feels_like") val feelsLike: Float
 )

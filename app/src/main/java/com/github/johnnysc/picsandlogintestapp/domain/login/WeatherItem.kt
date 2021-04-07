@@ -8,8 +8,8 @@ package com.github.johnnysc.picsandlogintestapp.domain.login
 sealed class WeatherItem {
     data class Basic(
         val description: String,
-        val temp: String,
-        val feelsLike: String
+        val temp: Int,
+        val feelsLike: Int
     ) : WeatherItem()
 
     object Error : WeatherItem()
