@@ -5,8 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
-import com.github.johnnysc.picsandlogintestapp.R
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
@@ -21,14 +20,8 @@ import okhttp3.ResponseBody
 suspend fun ResponseBody.stringSuspending(): String =
     withContext(Dispatchers.IO) { string() }
 
-fun ImageView.load(url: String) {
-    val width = this.context.resources.displayMetrics.widthPixels
-    Picasso.get().load(url)
-        .centerInside()
-        .resize(width / 2, width / 4)
-        .error(R.mipmap.ic_launcher)
-        .onlyScaleDown()
-        .into(this)
+fun ImageView.load(url:String) {
+    Glide.with(this).load(url).into(this)
 }
 
 fun ViewGroup.inflate(@LayoutRes layoutResId: Int): View =

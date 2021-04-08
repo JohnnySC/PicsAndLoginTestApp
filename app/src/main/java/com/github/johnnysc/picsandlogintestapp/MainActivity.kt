@@ -11,21 +11,35 @@ import com.github.johnnysc.picsandlogintestapp.ui.pics.PicsFragment
  */
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val PICS_FRAGMENT_TAG = "picsFragment"
+        const val LOGIN_FRAGMENT_TAG = "loginFragment"
+        const val IS_LOGIN_SELECTED_KEY = "isLoginSelected"
+    }
+
+    private lateinit var navView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView = findViewById(R.id.nav_view)
 
-        val picsFragment = PicsFragment()
-        val loginFragment = LoginFragment()
+        val picsFragment = if (savedInstanceState == null) PicsFragment()
+        else supportFragmentManager.findFragmentByTag(PICS_FRAGMENT_TAG)!!
+        val loginFragment = if (savedInstanceState == null) LoginFragment()
+        else supportFragmentManager.findFragmentByTag(LOGIN_FRAGMENT_TAG)!!
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, loginFragment)
-            .hide(loginFragment)
-            .commit()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, picsFragment)
-            .commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, loginFragment, LOGIN_FRAGMENT_TAG)
+                .hide(loginFragment)
+                .commit()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, picsFragment, PICS_FRAGMENT_TAG)
+                .commit()
+        } else
+            navView.selectedItemId =
+                if (savedInstanceState.getBoolean(IS_LOGIN_SELECTED_KEY)) R.id.navigation_login else R.id.navigation_pics
 
         navView.setOnNavigationItemSelectedListener {
             val showPics = it.itemId == R.id.navigation_pics
@@ -36,5 +50,10 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_LOGIN_SELECTED_KEY, navView.selectedItemId == R.id.navigation_login)
     }
 }

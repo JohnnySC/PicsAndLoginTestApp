@@ -4,4 +4,5 @@
     <dimen name="margin_big">48dp</dimen>
     <dimen name="pic_card_view_height">300dp</dimen>
     <dimen name="pic_height">240dp</dimen>
+    <dimen name="logo_size">200dp</dimen>
 </resources>
