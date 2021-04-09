@@ -34,10 +34,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/logo_size" />
-
             <ImageView
                 android:id="@+id/logoImageView"
                 android:layout_width="@dimen/logo_size"

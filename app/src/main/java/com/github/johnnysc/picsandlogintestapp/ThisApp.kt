@@ -2,6 +2,7 @@ package com.github.johnnysc.picsandlogintestapp
 
 import android.app.Application
 import com.github.johnnysc.picsandlogintestapp.core.NetworkModule
+import com.github.johnnysc.picsandlogintestapp.core.ResourceManager
 import com.github.johnnysc.picsandlogintestapp.data.login.LoginRepositoryImpl
 import com.github.johnnysc.picsandlogintestapp.domain.pics.PicItemMapper
 import com.github.johnnysc.picsandlogintestapp.domain.pics.PicsInteractorImpl
@@ -16,10 +17,12 @@ import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItemMapper
  **/
 class ThisApp : Application() {
 
+    lateinit var resourceManager: ResourceManager
     private lateinit var networkModule: NetworkModule
 
     override fun onCreate() {
         super.onCreate()
+        resourceManager = ResourceManager(this)
         networkModule = NetworkModule()
     }
 

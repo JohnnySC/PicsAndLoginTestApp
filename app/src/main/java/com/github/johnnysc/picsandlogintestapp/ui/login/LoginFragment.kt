@@ -79,14 +79,7 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.messageState.observe(viewLifecycleOwner, Observer {
-            val message = if (it is WeatherItem.Basic) String.format(
-                getString(R.string.weather_description),
-                it.description,
-                it.temp,
-                it.feelsLike
-            ) else
-                getString(R.string.generic_error_message)
-            Snackbar.make(progressBar, message, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(progressBar, it, Snackbar.LENGTH_SHORT).show()
         })
 
         return root

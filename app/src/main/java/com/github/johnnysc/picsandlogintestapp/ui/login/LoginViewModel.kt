@@ -19,7 +19,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     val emailState = MutableLiveData<InputState>()
     val passwordState = MutableLiveData<InputState>()
     val progressState = MutableLiveData<Boolean>()
-    val messageState = MutableLiveData<WeatherItem>()
+    val messageState = MutableLiveData<String>()
 
     //region private fields
     private val passwordMinLength = 6
@@ -47,6 +47,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     private val interactor by lazy {
         (app as ThisApp).getLoginInteractor()
     }
+    private val mapper = WeatherUiMapper((app as ThisApp).resourceManager)
     //endregion
 
     fun login(email: String, password: String) {
@@ -69,7 +70,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             progressState.value = true
             viewModelScope.launch(Dispatchers.IO) {
                 val result = interactor.login()
-                messageState.postValue(result)
+                messageState.postValue(mapper.map(result).description)
                 progressState.postValue(false)
             }
         }
