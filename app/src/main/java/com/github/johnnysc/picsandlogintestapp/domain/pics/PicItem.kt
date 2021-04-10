@@ -9,5 +9,5 @@ import com.github.johnnysc.picsandlogintestapp.core.ExceptionType
  **/
 sealed class PicItem {
     data class Base(val text: String, val url: String) : PicItem()
-    data class Error(val exceptionType: ExceptionType) : PicItem()
+    data class Error(val exceptionType: ExceptionType = ExceptionType.GENERIC) : PicItem()
 }

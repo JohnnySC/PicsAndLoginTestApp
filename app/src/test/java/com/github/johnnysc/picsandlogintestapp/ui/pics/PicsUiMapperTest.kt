@@ -1,5 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics
 
+import com.github.johnnysc.picsandlogintestapp.core.TestResourceManagerImpl
+import com.github.johnnysc.picsandlogintestapp.domain.pics.PicItem
 import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.FullSizeError
 import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.FullSizeLoader
 import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicUiModelType
@@ -8,11 +10,15 @@ import org.junit.Assert.*
 import org.junit.Test
 
 /**
+ * Тест для мапера изображений
+ *
+ * @see PicsUiMapper
+ *
  * @author Asatryan on 01.04.21
  */
 class PicsUiMapperTest {
 
-    private val mapper = PicsUiMapper()
+    private val mapper = PicsUiMapper(TestResourceManagerImpl())
 
     @Test
     fun test_empty_list() {
@@ -24,7 +30,7 @@ class PicsUiMapperTest {
 
     @Test
     fun test_single_error() {
-        val source = listOf(PicItem.Error)
+        val source = listOf(PicItem.Error())
         val result = mapper.map(source)
         assertThat(result.size, `is`(1))
         assertThat(result[0] is FullSizeError, `is`(true))
@@ -57,7 +63,7 @@ class PicsUiMapperTest {
             PicItem.Base("txt3", "url3"),
             PicItem.Base("txt4", "url4"),
             PicItem.Base("txt5", "url5"),
-            PicItem.Error
+            PicItem.Error()
         )
         val result = mapper.map(source)
         result.forEachIndexed { index, item ->

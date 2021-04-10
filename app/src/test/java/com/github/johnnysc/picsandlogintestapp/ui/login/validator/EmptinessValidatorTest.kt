@@ -5,6 +5,10 @@ import org.junit.Assert.*
 import org.junit.Test
 
 /**
+ * Тест для валидатора пустоты
+ *
+ * @see EmptinessValidator
+ *
  * @author Asatryan on 31.03.21
  */
 class EmptinessValidatorTest {
