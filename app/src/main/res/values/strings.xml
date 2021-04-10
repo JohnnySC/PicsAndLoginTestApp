@@ -15,4 +15,5 @@
     <string name="generic_error_message">Something went wrong</string>
     <string name="weather_description">Погода сегодня: %s, температура: %d, ощущается как %d</string>
     <string name="logo_url"><![CDATA[https://drive.google.com/u/0/uc?id=1fJGLqz7ynMLSiCiIZvFYuweW_Tc0wO8m&export=download]]></string>
+    <string name="network_unavailable_message">Network is unavailable</string>
 </resources>

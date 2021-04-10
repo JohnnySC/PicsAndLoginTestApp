@@ -23,5 +23,9 @@ class WeatherUiMapper(private val resourceManager: ResourceManager) :
             )
         )
     } else
-        WeatherUiModel(resourceManager.getString(R.string.generic_error_message))
+        WeatherUiModel(
+            resourceManager.getErrorMessage(
+                (source as WeatherItem.Error).exceptionType
+            )
+        )
 }

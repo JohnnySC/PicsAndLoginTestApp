@@ -1,6 +1,8 @@
 package com.github.johnnysc.picsandlogintestapp
 
 import android.app.Application
+import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandler
+import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandlerImpl
 import com.github.johnnysc.picsandlogintestapp.core.NetworkModule
 import com.github.johnnysc.picsandlogintestapp.core.ResourceManager
 import com.github.johnnysc.picsandlogintestapp.data.login.LoginRepositoryImpl
@@ -19,20 +21,24 @@ class ThisApp : Application() {
 
     lateinit var resourceManager: ResourceManager
     private lateinit var networkModule: NetworkModule
+    private lateinit var exceptionHandler: ExceptionHandler
 
     override fun onCreate() {
         super.onCreate()
         resourceManager = ResourceManager(this)
+        exceptionHandler = ExceptionHandlerImpl()
         networkModule = NetworkModule()
     }
 
     fun getPicsInteractor() = PicsInteractorImpl(
         PicsRepositoryImpl(networkModule.getPicsService()),
-        PicItemMapper()
+        PicItemMapper(),
+        exceptionHandler
     )
 
     fun getLoginInteractor() = LoginInteractorImpl(
         LoginRepositoryImpl(networkModule.getLoginService()),
-        WeatherItemMapper()
+        WeatherItemMapper(),
+        exceptionHandler
     )
 }

@@ -33,16 +33,20 @@ class BottomLoaderViewHolder(view: View) : PicBaseViewHolder(view)
 
 class FullSizeErrorViewHolder(view: View, private val clickListener: PicsClickListener) :
     PicBaseViewHolder(view) {
-    override fun onBind(model: PicUiModel) =
-        itemView.findViewById<View>(R.id.fullSizeErrorTryAgainButton).setOnClickListener {
+    override fun onBind(model: PicUiModel) = with(itemView) {
+        findViewById<View>(R.id.fullSizeErrorTryAgainButton).setOnClickListener {
             clickListener.tryLoadDataAgain()
         }
+        findViewById<TextView>(R.id.fullSizeErrorTextView).text = (model as FullSizeError).message
+    }
 }
 
 class BottomErrorViewHolder(view: View, private val clickListener: PicsClickListener) :
     PicBaseViewHolder(view) {
-    override fun onBind(model: PicUiModel) =
-        itemView.findViewById<View>(R.id.bottomErrorTryAgainButton).setOnClickListener {
+    override fun onBind(model: PicUiModel) = with(itemView) {
+        findViewById<View>(R.id.bottomErrorTryAgainButton).setOnClickListener {
             clickListener.tryLoadMoreDataAgain()
         }
+        findViewById<TextView>(R.id.bottomErrorTextView).text = (model as BottomError).message
+    }
 }

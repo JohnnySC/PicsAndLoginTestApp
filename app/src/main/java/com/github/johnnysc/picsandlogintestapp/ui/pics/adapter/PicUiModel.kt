@@ -25,12 +25,12 @@ object BottomLoader : PicUiModel(PicUiModelType.BOTTOM_LOADER)
 /**
  * Полноэкранная ошибка
  */
-object FullSizeError : PicUiModel(PicUiModelType.FULL_SIZE_ERROR)
+data class FullSizeError(val message: String) : PicUiModel(PicUiModelType.FULL_SIZE_ERROR)
 
 /**
  * Ошибка на дне экрана
  */
-object BottomError : PicUiModel(PicUiModelType.BOTTOM_ERROR)
+data class BottomError(val message: String) : PicUiModel(PicUiModelType.BOTTOM_ERROR)
 
 /**
  * Виды элементов списка изображений

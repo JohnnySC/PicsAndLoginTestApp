@@ -1,5 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.domain.pics
 
+import com.github.johnnysc.picsandlogintestapp.core.ExceptionType
+
 /**
  * Изображение для бизнес логики
  *
@@ -7,5 +9,5 @@ package com.github.johnnysc.picsandlogintestapp.domain.pics
  **/
 sealed class PicItem {
     data class Base(val text: String, val url: String) : PicItem()
-    object Error : PicItem()
+    data class Error(val exceptionType: ExceptionType) : PicItem()
 }

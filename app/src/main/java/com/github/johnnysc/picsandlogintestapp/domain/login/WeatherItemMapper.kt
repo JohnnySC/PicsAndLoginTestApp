@@ -11,8 +11,8 @@ import com.github.johnnysc.picsandlogintestapp.data.login.WeatherDTO
 class WeatherItemMapper : Mapper<WeatherItem, WeatherDTO> {
 
     override fun map(source: WeatherDTO) = when {
-        source.weatherInnerDTO.isEmpty() -> WeatherItem.Error
-        source.weatherInnerDTO[0].description.isEmpty() -> WeatherItem.Error
+        source.weatherInnerDTO.isEmpty() -> WeatherItem.Error()
+        source.weatherInnerDTO[0].description.isEmpty() -> WeatherItem.Error()
         else -> WeatherItem.Basic(
             source.weatherInnerDTO[0].description,
             source.main.temp.toInt(),

@@ -1,5 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.domain.login
 
+import com.github.johnnysc.picsandlogintestapp.core.ExceptionType
+
 /**
  * Данные по погоде для слоя бизнес логики
  *
@@ -12,5 +14,5 @@ sealed class WeatherItem {
         val feelsLike: Int
     ) : WeatherItem()
 
-    object Error : WeatherItem()
+    data class Error(val exceptionType: ExceptionType  = ExceptionType.GENERIC) : WeatherItem()
 }

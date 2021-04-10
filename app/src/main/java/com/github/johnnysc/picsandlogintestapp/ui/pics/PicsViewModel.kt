@@ -18,7 +18,7 @@ class PicsViewModel(app:Application) : AndroidViewModel(app) {
 
     val dataState = MutableLiveData<List<PicUiModel>>()
 
-    private val mapper = PicsUiMapper()
+    private val mapper = PicsUiMapper((app as ThisApp).resourceManager)
 
     private val interactor = (app as ThisApp).getPicsInteractor()
 

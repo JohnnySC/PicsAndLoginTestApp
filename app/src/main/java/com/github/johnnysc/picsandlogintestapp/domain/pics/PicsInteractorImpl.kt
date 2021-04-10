@@ -1,5 +1,6 @@
 package com.github.johnnysc.picsandlogintestapp.domain.pics
 
+import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandler
 import java.lang.Exception
 
 /**
@@ -9,7 +10,8 @@ import java.lang.Exception
  **/
 class PicsInteractorImpl(
     private val repository: PicsRepository,
-    private val mapper: PicItemMapper
+    private val mapper: PicItemMapper,
+    private val exceptionHandler: ExceptionHandler
 ) : PicsInteractor {
 
     override fun getInitialData() = mapper.map(repository.getCachedData())
@@ -19,7 +21,7 @@ class PicsInteractorImpl(
     } catch (e: Exception) {
         ArrayList<PicItem>().apply {
             addAll(getInitialData())
-            add(PicItem.Error)
+            add(PicItem.Error(exceptionHandler.defineExceptionType(e)))
         }
     }
 
