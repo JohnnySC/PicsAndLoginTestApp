@@ -12,15 +12,14 @@ import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicUiModel
  *
  * @author Asatryan on 10.04.21
  **/
-interface InstanceProvider {
+interface InstanceProvider : LoginInstancesProvider, PicsInstancesProvider {
 
     fun provideExceptionHandler(): ExceptionHandler
 
     fun provideResourceManager(): ResourceManager
+}
 
-    fun providePicsUiMapper(): Mapper<List<PicUiModel>, List<PicItem>>
-
-    fun providePicItemMapper(): Mapper<List<PicItem>, List<PicDTO>>
+interface LoginInstancesProvider {
 
     fun provideWeatherUiMapper(): Mapper<WeatherUiModel, WeatherItem>
 
@@ -28,9 +27,16 @@ interface InstanceProvider {
 
     fun provideLoginRepository(): LoginRepository
 
-    fun providePicsRepository(): PicsRepository
-
     fun provideLoginInteractor(): LoginInteractor
+}
+
+interface PicsInstancesProvider {
+
+    fun providePicsUiMapper(): Mapper<List<PicUiModel>, List<PicItem>>
+
+    fun providePicItemMapper(): Mapper<List<PicItem>, List<PicDTO>>
+
+    fun providePicsRepository(): PicsRepository
 
     fun providePicsInteractor(): PicsInteractor
 }

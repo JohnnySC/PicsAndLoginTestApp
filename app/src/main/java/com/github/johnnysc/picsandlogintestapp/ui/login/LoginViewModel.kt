@@ -45,9 +45,9 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
         )
     }
     private val interactor by lazy {
-        (app as ThisApp).serviceLocator.instanceProvider.provideLoginInteractor()
+        (app as ThisApp).loginInstanceProvider.provideLoginInteractor()
     }
-    private val mapper = (app as ThisApp).serviceLocator.instanceProvider.provideWeatherUiMapper()
+    private val mapper = (app as ThisApp).loginInstanceProvider.provideWeatherUiMapper()
     //endregion
 
     fun login(email: String, password: String) {

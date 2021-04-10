@@ -18,10 +18,10 @@ class PicsViewModel(app: Application) : AndroidViewModel(app) {
 
     val dataState = MutableLiveData<List<PicUiModel>>()
 
-    private val mapper = (app as ThisApp).serviceLocator.instanceProvider.providePicsUiMapper()
+    private val mapper = (app as ThisApp).picsInstanceProvider.providePicsUiMapper()
 
     private val interactor =
-        (app as ThisApp).serviceLocator.instanceProvider.providePicsInteractor()
+        (app as ThisApp).picsInstanceProvider.providePicsInteractor()
 
     private var lastVisibleItemPos = -1
 

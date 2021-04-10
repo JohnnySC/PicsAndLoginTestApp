@@ -10,11 +10,15 @@ import com.github.johnnysc.picsandlogintestapp.core.*
  **/
 class ThisApp : Application() {
 
-    lateinit var serviceLocator: ServiceLocator
+    lateinit var loginInstanceProvider: LoginInstancesProvider
+    lateinit var picsInstanceProvider: PicsInstancesProvider
 
     override fun onCreate() {
         super.onCreate()
 
-        serviceLocator = ServiceLocator(BuildConfig.BUILD_TYPE, this)
+        ServiceLocator(BuildConfig.BUILD_TYPE, this).instanceProvider.let {
+            loginInstanceProvider = it
+            picsInstanceProvider = it
+        }
     }
 }
