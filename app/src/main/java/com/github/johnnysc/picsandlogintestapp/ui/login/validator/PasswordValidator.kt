@@ -1,6 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.ui.login.validator
 
 import com.github.johnnysc.picsandlogintestapp.core.UiValidator
+import java.util.regex.Pattern
 
 /**
  * Валидатор пароля: текст должен содержать минимум 1 букву в нижнем регистре, 1 букву в верхнем регистре и 1 цифру
@@ -11,20 +12,9 @@ class PasswordValidator(
     override val errorMessage: String
 ) : UiValidator {
 
-    override fun isValid(text: String): Boolean {
-        var containsUpperCaseLetter = false
-        var containsLowerCaseLetter = false
-        var containsDigit = false
+    override fun isValid(text: String) =
+        Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\W]{3,}")
+            .matcher(text)
+            .matches()
 
-        var char: Char
-        for (i in text.indices) {
-            char = text[i]
-            when {
-                Character.isUpperCase(char) -> containsUpperCaseLetter = true
-                Character.isLowerCase(char) -> containsLowerCaseLetter = true
-                Character.isDigit(char) -> containsDigit = true
-            }
-        }
-        return containsUpperCaseLetter && containsLowerCaseLetter && containsDigit
-    }
 }
