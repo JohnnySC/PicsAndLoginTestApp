@@ -12,10 +12,8 @@ import androidx.lifecycle.Observer
 import com.github.johnnysc.picsandlogintestapp.R
 import com.github.johnnysc.picsandlogintestapp.core.SimpleTextChangeListener
 import com.github.johnnysc.picsandlogintestapp.core.load
-import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItem
+import com.github.johnnysc.picsandlogintestapp.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 /**
  * Экран для логина и пароля
@@ -26,62 +24,69 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel by viewModels<LoginViewModel>()
 
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_login, container, false)
-        val logoImageView: ImageView = root.findViewById(R.id.logoImageView)
-        val emailTextInputLayout: TextInputLayout = root.findViewById(R.id.emailAddressTextInputLayout)
-        val passwordTextInputLayout: TextInputLayout = root.findViewById(R.id.passwordTextInputLayout)
-        val emailEditText: TextInputEditText = root.findViewById(R.id.emailAddressEditText)
-        val passwordEditText: TextInputEditText = root.findViewById(R.id.passwordEditText)
-        val loginButton: View = root.findViewById(R.id.loginButton)
-        val progressBar: View = root.findViewById(R.id.progressBar)
-        progressBar.bringToFront()
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        logoImageView.load(getString(R.string.logo_url))
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.progressBar.bringToFront()
+
+        binding.logoImageView.load(getString(R.string.logo_url))
 
         val emailTextWatcher = object : SimpleTextChangeListener() {
             override fun afterTextChanged(s: Editable?) {
-                if (emailTextInputLayout.isErrorEnabled)
+                if (binding.emailAddressTextInputLayout.isErrorEnabled)
                     loginViewModel.clearEmailError()
             }
         }
-        emailEditText.addTextChangedListener(emailTextWatcher)
+        binding.emailAddressEditText.addTextChangedListener(emailTextWatcher)
 
         val passwordTextWatcher = object : SimpleTextChangeListener() {
             override fun afterTextChanged(s: Editable?) {
-                if (passwordTextInputLayout.isErrorEnabled)
+                if (binding.passwordTextInputLayout.isErrorEnabled)
                     loginViewModel.clearPasswordError()
             }
         }
-        passwordEditText.addTextChangedListener(passwordTextWatcher)
+        binding.passwordEditText.addTextChangedListener(passwordTextWatcher)
 
-        loginButton.setOnClickListener {
-            loginViewModel.login(emailEditText.text.toString(), passwordEditText.text.toString())
+        binding.loginButton.setOnClickListener {
+            loginViewModel.login(
+                binding.emailAddressEditText.text.toString(),
+                binding.passwordEditText.text.toString()
+            )
         }
 
         loginViewModel.emailState.observe(viewLifecycleOwner, Observer {
-            emailTextInputLayout.isErrorEnabled = it.containsError
-            emailTextInputLayout.error = it.errorMessage
+            binding.emailAddressTextInputLayout.isErrorEnabled = it.containsError
+            binding.emailAddressTextInputLayout.error = it.errorMessage
         })
 
         loginViewModel.passwordState.observe(viewLifecycleOwner, Observer {
-            passwordTextInputLayout.isErrorEnabled = it.containsError
-            passwordTextInputLayout.error = it.errorMessage
+            binding.passwordTextInputLayout.isErrorEnabled = it.containsError
+            binding.passwordTextInputLayout.error = it.errorMessage
         })
 
         loginViewModel.progressState.observe(viewLifecycleOwner, Observer {
-            progressBar.visibility = if (it) View.VISIBLE else View.GONE
-            loginButton.isEnabled = !it
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            binding.loginButton.isEnabled = !it
         })
 
         loginViewModel.messageState.observe(viewLifecycleOwner, Observer {
-            Snackbar.make(progressBar, it, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.progressBar, it, Snackbar.LENGTH_SHORT).show()
         })
+    }
 
-        return root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
