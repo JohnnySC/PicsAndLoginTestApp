@@ -19,8 +19,12 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "BUILD_TYPE", "\"BASIC\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField("String", "BUILD_TYPE", "\"TEST\"")
         }
     }
     compileOptions {

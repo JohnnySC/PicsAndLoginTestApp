@@ -1,6 +1,8 @@
 package com.github.johnnysc.picsandlogintestapp.domain.login
 
 import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandler
+import com.github.johnnysc.picsandlogintestapp.core.Mapper
+import com.github.johnnysc.picsandlogintestapp.data.login.WeatherDTO
 import java.lang.Exception
 
 /**
@@ -10,7 +12,7 @@ import java.lang.Exception
  **/
 class LoginInteractorImpl(
     private val repository: LoginRepository,
-    private val mapper: WeatherItemMapper,
+    private val mapper: Mapper<WeatherItem, WeatherDTO>,
     private val exceptionHandler: ExceptionHandler
 ) : LoginInteractor {
 

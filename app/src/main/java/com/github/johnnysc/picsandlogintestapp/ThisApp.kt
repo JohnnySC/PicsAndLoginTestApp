@@ -1,16 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp
 
 import android.app.Application
-import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandler
-import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandlerImpl
-import com.github.johnnysc.picsandlogintestapp.core.NetworkModule
-import com.github.johnnysc.picsandlogintestapp.core.ResourceManager
-import com.github.johnnysc.picsandlogintestapp.data.login.LoginRepositoryImpl
-import com.github.johnnysc.picsandlogintestapp.domain.pics.PicItemMapper
-import com.github.johnnysc.picsandlogintestapp.domain.pics.PicsInteractorImpl
-import com.github.johnnysc.picsandlogintestapp.data.pics.PicsRepositoryImpl
-import com.github.johnnysc.picsandlogintestapp.domain.login.LoginInteractorImpl
-import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItemMapper
+import com.github.johnnysc.picsandlogintestapp.core.*
 
 /**
  * Кастомный класс для приложения
@@ -19,26 +10,11 @@ import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItemMapper
  **/
 class ThisApp : Application() {
 
-    lateinit var resourceManager: ResourceManager
-    private lateinit var networkModule: NetworkModule
-    private lateinit var exceptionHandler: ExceptionHandler
+    lateinit var serviceLocator: ServiceLocator
 
     override fun onCreate() {
         super.onCreate()
-        resourceManager = ResourceManager(this)
-        exceptionHandler = ExceptionHandlerImpl()
-        networkModule = NetworkModule()
+
+        serviceLocator = ServiceLocator(BuildConfig.BUILD_TYPE, this)
     }
-
-    fun getPicsInteractor() = PicsInteractorImpl(
-        PicsRepositoryImpl(networkModule.getPicsService()),
-        PicItemMapper(),
-        exceptionHandler
-    )
-
-    fun getLoginInteractor() = LoginInteractorImpl(
-        LoginRepositoryImpl(networkModule.getLoginService()),
-        WeatherItemMapper(),
-        exceptionHandler
-    )
 }

@@ -14,13 +14,14 @@ import kotlinx.coroutines.launch
  *
  * @author Asatryan on 31.03.21
  */
-class PicsViewModel(app:Application) : AndroidViewModel(app) {
+class PicsViewModel(app: Application) : AndroidViewModel(app) {
 
     val dataState = MutableLiveData<List<PicUiModel>>()
 
-    private val mapper = PicsUiMapper((app as ThisApp).resourceManager)
+    private val mapper = (app as ThisApp).serviceLocator.instanceProvider.providePicsUiMapper()
 
-    private val interactor = (app as ThisApp).getPicsInteractor()
+    private val interactor =
+        (app as ThisApp).serviceLocator.instanceProvider.providePicsInteractor()
 
     private var lastVisibleItemPos = -1
 

@@ -1,6 +1,8 @@
 package com.github.johnnysc.picsandlogintestapp.domain.pics
 
 import com.github.johnnysc.picsandlogintestapp.core.ExceptionHandler
+import com.github.johnnysc.picsandlogintestapp.core.Mapper
+import com.github.johnnysc.picsandlogintestapp.data.pics.PicDTO
 import java.lang.Exception
 
 /**
@@ -10,7 +12,7 @@ import java.lang.Exception
  **/
 class PicsInteractorImpl(
     private val repository: PicsRepository,
-    private val mapper: PicItemMapper,
+    private val mapper: Mapper<List<PicItem>, List<PicDTO>>,
     private val exceptionHandler: ExceptionHandler
 ) : PicsInteractor {
 
