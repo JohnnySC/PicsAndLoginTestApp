@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.picsandlogintestapp.R
 import com.github.johnnysc.picsandlogintestapp.ThisApp
-import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherItem
+import com.github.johnnysc.picsandlogintestapp.core.UiValidatorChain
 import com.github.johnnysc.picsandlogintestapp.ui.login.validator.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,21 +27,23 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
         EmptinessValidator(app.getString(R.string.empty_string_error_message))
     }
     private val emailValidators by lazy {
-        listOf(
+        UiValidatorChain(
             emptinessValidator,
             EmailValidator(app.getString(R.string.invalid_email_error_message))
         )
     }
     private val passwordValidators by lazy {
-        listOf(
+        UiValidatorChain(
             emptinessValidator,
-            MinLengthValidator(
-                app.getString(
-                    R.string.invalid_min_length_error_message,
-                    passwordMinLength
-                ), passwordMinLength
-            ),
-            PasswordValidator(app.getString(R.string.invalid_password_error_message))
+            UiValidatorChain(
+                MinLengthValidator(
+                    app.getString(
+                        R.string.invalid_min_length_error_message,
+                        passwordMinLength
+                    ), passwordMinLength
+                ),
+                PasswordValidator(app.getString(R.string.invalid_password_error_message))
+            )
         )
     }
     private val interactor by lazy {
@@ -52,19 +54,13 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
 
     fun login(email: String, password: String) {
         var success = true
-        for (validator in emailValidators) {
-            if (!validator.isValid(email)) {
-                emailState.value = InputState(true, validator.errorMessage)
-                success = false
-                break
-            }
+        if (!emailValidators.isValid(email)) {
+            emailState.value = InputState(true, emailValidators.errorMessage)
+            success = false
         }
-        for (validator in passwordValidators) {
-            if (!validator.isValid(password)) {
-                passwordState.value = InputState(true, validator.errorMessage)
-                success = false
-                break
-            }
+        if (!passwordValidators.isValid(password)) {
+            passwordState.value = InputState(true, passwordValidators.errorMessage)
+            success = false
         }
         if (success) {
             progressState.value = true
