@@ -45,8 +45,7 @@ class PicsFragment : Fragment(),
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (picsViewModel.loadMoreData(linearLayoutManager.findLastVisibleItemPosition()))
-                        picsViewModel.loadData()
+                    picsViewModel.loadMoreData(linearLayoutManager.findLastVisibleItemPosition())
                 }
             })
         }

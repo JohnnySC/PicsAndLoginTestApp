@@ -2,6 +2,7 @@ package com.github.johnnysc.picsandlogintestapp.ui.pics
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.picsandlogintestapp.ThisApp
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
  */
 class PicsViewModel(app: Application) : AndroidViewModel(app) {
 
-    val dataState = MutableLiveData<List<PicUiModel>>()
+    private val _dataState = MutableLiveData<List<PicUiModel>>()
+    val dataState: LiveData<List<PicUiModel>>
+        get() = _dataState
 
     private val mapper = (app as ThisApp).picsInstanceProvider.providePicsUiMapper()
 
@@ -29,27 +32,26 @@ class PicsViewModel(app: Application) : AndroidViewModel(app) {
      * Отображаем начальное состояние экрана
      */
     init {
-        dataState.value = mapper.map(interactor.getInitialData())
+        _dataState.value = mapper.map(interactor.getInitialData())
     }
 
     /**
      * Получаем данные
      */
     fun loadData() = viewModelScope.launch(Dispatchers.IO) {
-        dataState.postValue(mapper.map(interactor.getData()))
+        _dataState.postValue(mapper.map(interactor.getData()))
     }
 
     /**
      * Нужно ли загружать еще данные
      * Проверяем что юзер проскролил до дна списка
      */
-    fun loadMoreData(lastVisibleItemPosition: Int): Boolean {
+    fun loadMoreData(lastVisibleItemPosition: Int) {
         if (lastVisibleItemPosition != lastVisibleItemPos) {
             if (interactor.needToLoadMoreData(lastVisibleItemPosition)) {
                 lastVisibleItemPos = lastVisibleItemPosition
-                return true
+                loadData()
             }
         }
-        return false
     }
 }

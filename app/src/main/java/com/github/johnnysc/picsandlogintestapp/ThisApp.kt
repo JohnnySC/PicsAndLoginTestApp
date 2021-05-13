@@ -10,8 +10,8 @@ import com.github.johnnysc.picsandlogintestapp.core.*
  **/
 class ThisApp : Application() {
 
-    lateinit var loginInstanceProvider: LoginInstancesProvider
-    lateinit var picsInstanceProvider: PicsInstancesProvider
+    lateinit var loginInstanceProvider: LoginUiInstanceProvider
+    lateinit var picsInstanceProvider: PicsUiInstanceProvider
 
     override fun onCreate() {
         super.onCreate()
