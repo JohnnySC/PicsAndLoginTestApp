@@ -8,6 +8,19 @@ import com.github.johnnysc.picsandlogintestapp.core.ExceptionType
  * @author Asatryan on 06.04.21
  **/
 sealed class PicItem {
-    data class Base(val text: String, val url: String) : PicItem()
-    data class Error(val exceptionType: ExceptionType = ExceptionType.GENERIC) : PicItem()
+    abstract fun <T> map(mapper: PicItemUiMapper<T>): T
+    class Base(private val text: String, private val url: String) : PicItem() {
+        override fun <T> map(mapper: PicItemUiMapper<T>) = mapper.map(text, url)
+    }
+
+    class Error(private val exceptionType: ExceptionType = ExceptionType.GENERIC) : PicItem() {
+        override fun <T> map(mapper: PicItemUiMapper<T>) = mapper.map(exceptionType)
+    }
+}
+
+interface PicItemUiMapper<T> {
+
+    fun map(text: String, url: String): T
+
+    fun map(exceptionType: ExceptionType): T
 }

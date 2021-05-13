@@ -18,9 +18,10 @@ abstract class PicBaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class PicViewHolder(view: View) : PicBaseViewHolder(view) {
     override fun onBind(model: PicUiModel) = with(itemView) {
-        findViewById<TextView>(R.id.picDescriptionTextView).text =
-            (model as Basic).text
-        findViewById<ImageView>(R.id.picImageView).load(model.url)
+        model.show(
+            findViewById(R.id.picDescriptionTextView),
+            findViewById(R.id.picImageView)
+        )
     }
 }
 
@@ -37,7 +38,7 @@ class FullSizeErrorViewHolder(view: View, private val clickListener: PicsClickLi
         findViewById<View>(R.id.fullSizeErrorTryAgainButton).setOnClickListener {
             clickListener.tryLoadDataAgain()
         }
-        findViewById<TextView>(R.id.fullSizeErrorTextView).text = (model as FullSizeError).message
+        model.show(findViewById(R.id.fullSizeErrorTextView))
     }
 }
 
@@ -47,6 +48,6 @@ class BottomErrorViewHolder(view: View, private val clickListener: PicsClickList
         findViewById<View>(R.id.bottomErrorTryAgainButton).setOnClickListener {
             clickListener.tryLoadMoreDataAgain()
         }
-        findViewById<TextView>(R.id.bottomErrorTextView).text = (model as BottomError).message
+        model.show(findViewById(R.id.bottomErrorTextView))
     }
 }

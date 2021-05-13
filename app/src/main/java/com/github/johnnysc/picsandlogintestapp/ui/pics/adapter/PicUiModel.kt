@@ -1,16 +1,30 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics.adapter
 
+import android.widget.ImageView
+import android.widget.TextView
+import com.github.johnnysc.picsandlogintestapp.core.load
+
 /**
  * Модель изображения для юай слоя
  *
  * @author Asatryan on 05.04.21
  **/
-abstract class PicUiModel(val type: PicUiModelType)
+abstract class PicUiModel(val type: PicUiModelType) {
+    open fun show(textView: TextView) {}
+    open fun show(textView: TextView, imageView: ImageView) {}
+}
 
 /**
  * Базовый класс отображения изображения
  */
-data class Basic(val text: String, val url: String) : PicUiModel(PicUiModelType.BASIC)
+class Basic(private val text: String, private val url: String) :
+    PicUiModel(PicUiModelType.BASIC) {
+
+    override fun show(textView: TextView, imageView: ImageView) {
+        textView.text = text
+        imageView.load(url)
+    }
+}
 
 /**
  * Полноэкранный загрузчик
@@ -25,12 +39,16 @@ object BottomLoader : PicUiModel(PicUiModelType.BOTTOM_LOADER)
 /**
  * Полноэкранная ошибка
  */
-data class FullSizeError(val message: String) : PicUiModel(PicUiModelType.FULL_SIZE_ERROR)
+class FullSizeError(message: String) : AnyError(message, PicUiModelType.FULL_SIZE_ERROR)
 
 /**
  * Ошибка на дне экрана
  */
-data class BottomError(val message: String) : PicUiModel(PicUiModelType.BOTTOM_ERROR)
+class BottomError(message: String) : AnyError(message, PicUiModelType.BOTTOM_ERROR)
+
+abstract class AnyError(private val message: String, type: PicUiModelType) : PicUiModel(type) {
+    override fun show(textView: TextView) = textView.setText(message)
+}
 
 /**
  * Виды элементов списка изображений
