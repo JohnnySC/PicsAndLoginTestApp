@@ -4,7 +4,7 @@ import com.github.johnnysc.picsandlogintestapp.data.login.WeatherDTO
 import com.github.johnnysc.picsandlogintestapp.data.pics.PicDTO
 import com.github.johnnysc.picsandlogintestapp.domain.login.*
 import com.github.johnnysc.picsandlogintestapp.domain.pics.*
-import com.github.johnnysc.picsandlogintestapp.ui.login.WeatherUiMapper
+import com.github.johnnysc.picsandlogintestapp.ui.login.WeatherUiMapperImpl
 import com.github.johnnysc.picsandlogintestapp.ui.login.WeatherUiModel
 import com.github.johnnysc.picsandlogintestapp.ui.pics.PicsUiMapper
 import com.github.johnnysc.picsandlogintestapp.ui.pics.adapter.PicUiModel
@@ -32,8 +32,8 @@ abstract class AbstractInstanceProvider : InstanceProvider {
         return PicItemMapper()
     }
 
-    override fun provideWeatherUiMapper(): Mapper<WeatherUiModel, WeatherItem> {
-        return WeatherUiMapper(provideResourceManager())
+    override fun provideWeatherUiMapper(): WeatherUiMapper<WeatherUiModel> {
+        return WeatherUiMapperImpl(provideResourceManager())
     }
 
     override fun provideWeatherItemMapper(): Mapper<WeatherItem, WeatherDTO> {

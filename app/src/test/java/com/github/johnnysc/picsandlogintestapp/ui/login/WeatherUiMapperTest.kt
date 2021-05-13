@@ -16,12 +16,12 @@ import org.junit.Test
  */
 class WeatherUiMapperTest {
 
-    private val mapper = WeatherUiMapper(TestResourceManagerImpl())
+    private val mapper = WeatherUiMapperImpl(TestResourceManagerImpl())
 
     @Test
     fun test_basic() {
         val item = WeatherItem.Basic("desc", 1, 2)
-        val result = mapper.map(item)
+        val result = item.map(mapper)
         val expected = WeatherUiModel("stub with args")
         assertThat(result, `is`(expected))
     }
@@ -29,7 +29,7 @@ class WeatherUiMapperTest {
     @Test
     fun test_network_error() {
         val item = WeatherItem.Error(ExceptionType.NETWORK_UNAVAILABLE)
-        val result = mapper.map(item)
+        val result = item.map(mapper)
         val expected = WeatherUiModel("network is not available!")
         assertThat(result, `is`(expected))
     }
@@ -37,7 +37,7 @@ class WeatherUiMapperTest {
     @Test
     fun test_generic_error() {
         val item = WeatherItem.Error(ExceptionType.GENERIC)
-        val result = mapper.map(item)
+        val result = item.map(mapper)
         val expected = WeatherUiModel("just generic error")
         assertThat(result, `is`(expected))
     }

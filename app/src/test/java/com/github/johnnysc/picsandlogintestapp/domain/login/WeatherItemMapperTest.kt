@@ -23,25 +23,26 @@ class WeatherItemMapperTest {
     fun test_empty_data() {
         val source = WeatherDTO(emptyList(), WeatherMainInfoDTO(1f, 2f))
         val result = mapper.map(source)
+        val expected = WeatherItem.Error()
         assertThat(result is WeatherItem.Error, `is`(true))
-        assertThat((result as WeatherItem.Error).exceptionType, `is`(ExceptionType.GENERIC))
+        assertThat(result as WeatherItem.Error, `is`(expected))
     }
 
     @Test
     fun test_empty_description() {
         val source = WeatherDTO(listOf(WeatherInnerDTO("")), WeatherMainInfoDTO(1f, 2f))
         val result = mapper.map(source)
+        val expected = WeatherItem.Error()
         assertThat(result is WeatherItem.Error, `is`(true))
-        assertThat((result as WeatherItem.Error).exceptionType, `is`(ExceptionType.GENERIC))
+        assertThat(result as WeatherItem.Error, `is`(expected))
     }
 
     @Test
     fun test_basic_case() {
         val source = WeatherDTO(listOf(WeatherInnerDTO("some")), WeatherMainInfoDTO(1.5f, 2.3f))
         val result = mapper.map(source)
+        val expected = WeatherItem.Basic("some", 1, 2)
         assertThat(result is WeatherItem.Basic, `is`(true))
-        assertThat((result as WeatherItem.Basic).description, `is`("some"))
-        assertThat(result.temp, `is`(1))
-        assertThat(result.feelsLike, `is`(2))
+        assertThat((result as WeatherItem.Basic), `is`(expected))
     }
 }

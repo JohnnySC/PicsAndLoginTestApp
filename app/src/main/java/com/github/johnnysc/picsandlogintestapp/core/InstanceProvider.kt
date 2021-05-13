@@ -21,7 +21,7 @@ interface InstanceProvider : LoginInstancesProvider, PicsInstancesProvider {
 
 interface LoginInstancesProvider {
 
-    fun provideWeatherUiMapper(): Mapper<WeatherUiModel, WeatherItem>
+    fun provideWeatherUiMapper(): WeatherUiMapper<WeatherUiModel>
 
     fun provideWeatherItemMapper(): Mapper<WeatherItem, WeatherDTO>
 

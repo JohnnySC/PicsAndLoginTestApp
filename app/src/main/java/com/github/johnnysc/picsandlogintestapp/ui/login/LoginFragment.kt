@@ -5,7 +5,6 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -81,7 +80,7 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.messageState.observe(viewLifecycleOwner, Observer {
-            Snackbar.make(binding.progressBar, it, Snackbar.LENGTH_SHORT).show()
+            it.show(Snackbar.make(binding.progressBar, "", Snackbar.LENGTH_SHORT))
         })
     }
 

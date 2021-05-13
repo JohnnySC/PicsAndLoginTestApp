@@ -19,7 +19,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     val emailState = MutableLiveData<InputState>()
     val passwordState = MutableLiveData<InputState>()
     val progressState = MutableLiveData<Boolean>()
-    val messageState = MutableLiveData<String>()
+    val messageState = MutableLiveData<WeatherUiModel>()
 
     //region private fields
     private val passwordMinLength = 6
@@ -66,7 +66,7 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             progressState.value = true
             viewModelScope.launch(Dispatchers.IO) {
                 val result = interactor.login()
-                messageState.postValue(mapper.map(result).description)
+                messageState.postValue(result.map(mapper))
                 progressState.postValue(false)
             }
         }
