@@ -9,7 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.picsandlogintestapp.R
 import com.github.johnnysc.picsandlogintestapp.ThisApp
+import com.github.johnnysc.picsandlogintestapp.core.ErrorContainer
 import com.github.johnnysc.picsandlogintestapp.core.UiValidatorChain
+import com.github.johnnysc.picsandlogintestapp.core.ViewContainer
 import com.github.johnnysc.picsandlogintestapp.ui.login.validator.*
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
@@ -99,15 +101,12 @@ class InputState(
     private val containsError: Boolean = false,
     private val errorMessage: String = ""
 ) {
-    fun show(inputLayout: TextInputLayout) = with(inputLayout) {
-        isErrorEnabled = containsError
-        error = errorMessage
-    }
+    fun show(errorContainer: ErrorContainer) = errorContainer.show(containsError, errorMessage)
 }
 
 class ProgressState(private val visible: Boolean) {
-    fun apply(progressBar: View, button: Button) {
-        progressBar.visibility = if (visible) View.VISIBLE else View.GONE
-        button.isEnabled = !visible
+    fun apply(progressBar: ViewContainer, button: ViewContainer) {
+        progressBar.show(visible)
+        button.enable(!visible)
     }
 }

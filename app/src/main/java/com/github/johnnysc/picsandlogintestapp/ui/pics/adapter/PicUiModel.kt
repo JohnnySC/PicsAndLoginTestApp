@@ -1,8 +1,7 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics.adapter
 
-import android.widget.ImageView
-import android.widget.TextView
-import com.github.johnnysc.picsandlogintestapp.core.load
+import com.github.johnnysc.picsandlogintestapp.core.ImageContainer
+import com.github.johnnysc.picsandlogintestapp.core.TextContainer
 
 /**
  * Модель изображения для юай слоя
@@ -10,8 +9,8 @@ import com.github.johnnysc.picsandlogintestapp.core.load
  * @author Asatryan on 05.04.21
  **/
 abstract class PicUiModel(val type: PicUiModelType) {
-    open fun show(textView: TextView) {}
-    open fun show(textView: TextView, imageView: ImageView) {}
+    open fun show(textContainer: TextContainer) {}
+    open fun show(textContainer: TextContainer, imageContainer: ImageContainer) {}
 }
 
 /**
@@ -20,9 +19,9 @@ abstract class PicUiModel(val type: PicUiModelType) {
 class Basic(private val text: String, private val url: String) :
     PicUiModel(PicUiModelType.BASIC) {
 
-    override fun show(textView: TextView, imageView: ImageView) {
-        textView.text = text
-        imageView.load(url)
+    override fun show(textContainer: TextContainer, imageContainer: ImageContainer) {
+        textContainer.show(text)
+        imageContainer.show(url)
     }
 }
 
@@ -47,7 +46,7 @@ class FullSizeError(message: String) : AnyError(message, PicUiModelType.FULL_SIZ
 class BottomError(message: String) : AnyError(message, PicUiModelType.BOTTOM_ERROR)
 
 abstract class AnyError(private val message: String, type: PicUiModelType) : PicUiModel(type) {
-    override fun show(textView: TextView) = textView.setText(message)
+    override fun show(textContainer: TextContainer) = textContainer.show(message)
 }
 
 /**

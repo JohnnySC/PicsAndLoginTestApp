@@ -1,11 +1,10 @@
 package com.github.johnnysc.picsandlogintestapp.ui.pics.adapter
 
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.github.johnnysc.picsandlogintestapp.R
-import com.github.johnnysc.picsandlogintestapp.core.load
+import com.github.johnnysc.picsandlogintestapp.databinding.BottomErrorLayoutBinding
+import com.github.johnnysc.picsandlogintestapp.databinding.FullsizeErrorLayoutBinding
+import com.github.johnnysc.picsandlogintestapp.databinding.PicLayoutBinding
 
 /**
  * Вьюхолдеры для разных видов на экране изображений
@@ -17,11 +16,9 @@ abstract class PicBaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class PicViewHolder(view: View) : PicBaseViewHolder(view) {
-    override fun onBind(model: PicUiModel) = with(itemView) {
-        model.show(
-            findViewById(R.id.picDescriptionTextView),
-            findViewById(R.id.picImageView)
-        )
+    private val binding = PicLayoutBinding.bind(view)
+    override fun onBind(model: PicUiModel) = with(binding) {
+        model.show(picDescriptionTextView, picImageView)
     }
 }
 
@@ -34,20 +31,22 @@ class BottomLoaderViewHolder(view: View) : PicBaseViewHolder(view)
 
 class FullSizeErrorViewHolder(view: View, private val clickListener: PicsClickListener) :
     PicBaseViewHolder(view) {
-    override fun onBind(model: PicUiModel) = with(itemView) {
-        findViewById<View>(R.id.fullSizeErrorTryAgainButton).setOnClickListener {
+    private val binding = FullsizeErrorLayoutBinding.bind(view)
+    override fun onBind(model: PicUiModel) = with(binding) {
+        fullSizeErrorTryAgainButton.setOnClickListener {
             clickListener.tryLoadDataAgain()
         }
-        model.show(findViewById(R.id.fullSizeErrorTextView))
+        model.show(fullSizeErrorTextView)
     }
 }
 
 class BottomErrorViewHolder(view: View, private val clickListener: PicsClickListener) :
     PicBaseViewHolder(view) {
-    override fun onBind(model: PicUiModel) = with(itemView) {
-        findViewById<View>(R.id.bottomErrorTryAgainButton).setOnClickListener {
+    private val binding = BottomErrorLayoutBinding.bind(view)
+    override fun onBind(model: PicUiModel) = with(binding) {
+        bottomErrorTryAgainButton.setOnClickListener {
             clickListener.tryLoadMoreDataAgain()
         }
-        model.show(findViewById(R.id.bottomErrorTextView))
+        model.show(bottomErrorTextView)
     }
 }

@@ -1,6 +1,6 @@
 package com.github.johnnysc.picsandlogintestapp.ui.login
 
-import com.google.android.material.snackbar.Snackbar
+import com.github.johnnysc.picsandlogintestapp.core.TextContainer
 
 /**
  * Отображение погоды в юай слое
@@ -9,8 +9,5 @@ import com.google.android.material.snackbar.Snackbar
  **/
 data class WeatherUiModel(private val description: String) {
 
-    fun show(snackbar: Snackbar) {
-        snackbar.setText(description)
-        snackbar.show()
-    }
+    fun show(textContainer: TextContainer) = textContainer.show(description)
 }

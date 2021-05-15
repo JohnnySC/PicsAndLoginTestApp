@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.github.johnnysc.picsandlogintestapp.R
+import com.github.johnnysc.picsandlogintestapp.core.MySnackbar
 import com.github.johnnysc.picsandlogintestapp.core.listenChanges
 import com.github.johnnysc.picsandlogintestapp.core.load
 import com.github.johnnysc.picsandlogintestapp.databinding.FragmentLoginBinding
@@ -60,7 +61,7 @@ class LoginFragment : Fragment() {
             it.apply(binding.progressBar, binding.loginButton)
         })
         loginViewModel.messageState.observe(viewLifecycleOwner, Observer {
-            it.show(Snackbar.make(binding.progressBar, "", Snackbar.LENGTH_SHORT))
+            it.show(MySnackbar(Snackbar.make(binding.progressBar, "", Snackbar.LENGTH_SHORT)))
         })
     }
 
