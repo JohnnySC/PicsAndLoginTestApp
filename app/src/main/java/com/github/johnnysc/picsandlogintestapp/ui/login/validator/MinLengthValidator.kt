@@ -8,9 +8,9 @@ import com.github.johnnysc.picsandlogintestapp.core.UiValidator
  * @author Asatryan on 31.03.21
  **/
 open class MinLengthValidator(
-    override val errorMessage: String,
+    errorMessage: String,
     private val minLength: Int
-) : UiValidator {
+) : UiValidator.Abstract(errorMessage) {
 
     override fun isValid(text: String): Boolean {
         return text.length >= minLength

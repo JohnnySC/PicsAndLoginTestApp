@@ -10,10 +10,16 @@ interface UiValidator {
     /**
      * Сообщение об ошибке
      */
-    val errorMessage: String
+    fun errorMessage(): String
 
     /**
      * @return {@code true} если аргумент прошел валидацию, иначе {@code false}
      */
     fun isValid(text: String): Boolean
+
+    abstract class Abstract(private val message: String) : UiValidator {
+        override fun errorMessage(): String {
+            return message
+        }
+    }
 }

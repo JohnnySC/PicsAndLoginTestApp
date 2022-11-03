@@ -9,8 +9,8 @@ import java.util.regex.Pattern
  * @author Asatryan on 31.03.21
  **/
 class PasswordValidator(
-    override val errorMessage: String
-) : UiValidator {
+    errorMessage: String
+) : UiValidator.Abstract(errorMessage) {
 
     override fun isValid(text: String) =
         Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\W]{3,}")

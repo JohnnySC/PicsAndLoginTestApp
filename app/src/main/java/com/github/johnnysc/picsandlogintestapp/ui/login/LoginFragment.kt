@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.github.johnnysc.picsandlogintestapp.R
-import com.github.johnnysc.picsandlogintestapp.core.MySnackbar
+import com.github.johnnysc.picsandlogintestapp.ThisApp
 import com.github.johnnysc.picsandlogintestapp.core.listenChanges
 import com.github.johnnysc.picsandlogintestapp.core.load
 import com.github.johnnysc.picsandlogintestapp.databinding.FragmentLoginBinding
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * Экран для логина и пароля
@@ -21,7 +18,9 @@ import com.google.android.material.snackbar.Snackbar
  */
 class LoginFragment : Fragment() {
 
-    private val loginViewModel by viewModels<LoginViewModel>()
+    private val viewModel by lazy {
+        (requireActivity().application as ThisApp).viewModel()
+    }
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -30,7 +29,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -39,30 +38,22 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.progressBar.bringToFront()
         binding.logoImageView.load(getString(R.string.logo_url))
-        binding.emailAddressEditText.listenChanges {
-            loginViewModel.clearEmailError(binding.emailAddressTextInputLayout)
-        }
-        binding.passwordEditText.listenChanges {
-            loginViewModel.clearPasswordError(binding.passwordTextInputLayout)
+
+        viewModel.observe(this) {
+            it.handle(binding)
         }
         binding.loginButton.setOnClickListener {
-            loginViewModel.login(
+            viewModel.login(
                 binding.emailAddressEditText.text.toString(),
                 binding.passwordEditText.text.toString()
             )
         }
-        loginViewModel.emailState.observe(viewLifecycleOwner, Observer {
-            it.show(binding.emailAddressTextInputLayout)
-        })
-        loginViewModel.passwordState.observe(viewLifecycleOwner, Observer {
-            it.show(binding.passwordTextInputLayout)
-        })
-        loginViewModel.progressState.observe(viewLifecycleOwner, Observer {
-            it.apply(binding.progressBar, binding.loginButton)
-        })
-        loginViewModel.messageState.observe(viewLifecycleOwner, Observer {
-            it.show(MySnackbar(Snackbar.make(binding.progressBar, "", Snackbar.LENGTH_SHORT)))
-        })
+        binding.emailAddressEditText.listenChanges {
+            binding.emailAddressTextInputLayout.show(false, "")
+        }
+        binding.passwordEditText.listenChanges {
+            binding.passwordTextInputLayout.show(false, "")
+        }
     }
 
     override fun onDestroyView() {

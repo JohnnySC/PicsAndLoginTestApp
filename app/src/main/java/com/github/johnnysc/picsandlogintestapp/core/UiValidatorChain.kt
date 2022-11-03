@@ -21,6 +21,5 @@ class UiValidatorChain(
         return if (baseValid) next.isValid(text) else false
     }
 
-    override val errorMessage: String
-        get() = if (baseValid) next.errorMessage else base.errorMessage
+    override fun errorMessage(): String = if (baseValid) next.errorMessage() else base.errorMessage()
 }

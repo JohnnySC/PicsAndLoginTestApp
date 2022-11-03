@@ -1,112 +1,130 @@
 package com.github.johnnysc.picsandlogintestapp.ui.login
 
-import android.app.Application
-import android.view.View
-import android.widget.Button
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.github.johnnysc.picsandlogintestapp.R
-import com.github.johnnysc.picsandlogintestapp.ThisApp
-import com.github.johnnysc.picsandlogintestapp.core.ErrorContainer
-import com.github.johnnysc.picsandlogintestapp.core.UiValidatorChain
-import com.github.johnnysc.picsandlogintestapp.core.ViewContainer
-import com.github.johnnysc.picsandlogintestapp.ui.login.validator.*
-import com.google.android.material.textfield.TextInputLayout
+import androidx.lifecycle.*
+import com.github.johnnysc.picsandlogintestapp.core.MySnackbar
+import com.github.johnnysc.picsandlogintestapp.core.UiValidator
+import com.github.johnnysc.picsandlogintestapp.databinding.FragmentLoginBinding
+import com.github.johnnysc.picsandlogintestapp.domain.login.LoginInteractor
+import com.github.johnnysc.picsandlogintestapp.domain.login.WeatherUiMapper
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
- * @author Asatryan on 31.03.21
+ * @author Asatryan on 03.11.2022
  */
-class LoginViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val _emailState = MutableLiveData<InputState>()
-    val emailState: LiveData<InputState>
-        get() = _emailState
-    private val _passwordState = MutableLiveData<InputState>()
-    val passwordState: LiveData<InputState>
-        get() = _passwordState
-    private val _progressState = MutableLiveData<ProgressState>()
-    val progressState: LiveData<ProgressState>
-        get() = _progressState
-    private val _messageState = MutableLiveData<WeatherUiModel>()
-    val messageState: LiveData<WeatherUiModel>
-        get() = _messageState
-
-    //region private fields
-    private val passwordMinLength = 6
-    private val emptinessValidator by lazy {
-        EmptinessValidator(app.getString(R.string.empty_string_error_message))
-    }
-    private val emailValidators by lazy {
-        UiValidatorChain(
-            emptinessValidator,
-            EmailValidator(app.getString(R.string.invalid_email_error_message))
-        )
-    }
-    private val passwordValidators by lazy {
-        UiValidatorChain(
-            emptinessValidator,
-            UiValidatorChain(
-                MinLengthValidator(
-                    app.getString(
-                        R.string.invalid_min_length_error_message,
-                        passwordMinLength
-                    ), passwordMinLength
-                ),
-                PasswordValidator(app.getString(R.string.invalid_password_error_message))
-            )
-        )
-    }
-    private val interactor by lazy {
-        (app as ThisApp).loginInstanceProvider.provideLoginInteractor()
-    }
-    private val mapper = (app as ThisApp).loginInstanceProvider.provideWeatherUiMapper()
-    //endregion
+class LoginViewModel(
+    private val communication: LoginCommunication,
+    private val interactor: LoginInteractor,
+    private val mapper: WeatherUiMapper<WeatherUiModel>,
+    private val validateEmail: UiValidator,
+    private val validatePassword: UiValidator,
+    private val dispatchers: DispatchersList
+) : ViewModel(), Observe {
 
     fun login(email: String, password: String) {
-        var success = true
-        if (!emailValidators.isValid(email)) {
-            _emailState.value = InputState(true, emailValidators.errorMessage)
-            success = false
-        }
-        if (!passwordValidators.isValid(password)) {
-            _passwordState.value = InputState(true, passwordValidators.errorMessage)
-            success = false
-        }
-        if (success) {
-            _progressState.value = ProgressState(true)
-            viewModelScope.launch(Dispatchers.IO) {
+        if (validateEmail.isValid(email) && validatePassword.isValid(password)) {
+            communication.map(LoginState.Progress)
+            viewModelScope.launch(dispatchers.io()) {
                 val result = interactor.login()
-                _messageState.postValue(result.map(mapper))
-                _progressState.postValue(ProgressState(false))
+                withContext(dispatchers.ui()) {
+                    result.map(mapper).map(communication)
+                }
             }
+        } else if (!validateEmail.isValid(email) && !validatePassword.isValid(password))
+            communication.map(
+                LoginState.TwoErrors(
+                    validateEmail.errorMessage(),
+                    validatePassword.errorMessage()
+                )
+            )
+        else if (validateEmail.isValid(email) && !validatePassword.isValid(password))
+            communication.map(LoginState.PasswordError(validatePassword.errorMessage()))
+        else
+            communication.map(LoginState.LoginError(validateEmail.errorMessage()))
+    }
+
+    override fun observe(owner: LifecycleOwner, observer: Observer<LoginState>) {
+        communication.observe(owner, observer)
+    }
+}
+
+interface DispatchersList {
+    fun io(): CoroutineDispatcher
+    fun ui(): CoroutineDispatcher
+
+    class Base : DispatchersList {
+        override fun io(): CoroutineDispatcher = Dispatchers.IO
+        override fun ui(): CoroutineDispatcher = Dispatchers.Main
+    }
+}
+
+interface Observe {
+    fun observe(owner: LifecycleOwner, observer: Observer<LoginState>)
+}
+
+interface LoginCommunication : Observe {
+    fun map(source: LoginState)
+
+    class Base(
+        private val liveData: MutableLiveData<LoginState> = MutableLiveData()
+    ) : LoginCommunication {
+
+        override fun map(source: LoginState) {
+            liveData.value = source
+        }
+
+        override fun observe(owner: LifecycleOwner, observer: Observer<LoginState>) {
+            liveData.observe(owner, observer)
+        }
+    }
+}
+
+sealed class LoginState {
+    abstract fun handle(binding: FragmentLoginBinding)
+
+    object Progress : LoginState() {
+        override fun handle(binding: FragmentLoginBinding) {
+            binding.progressBar.show(false)
         }
     }
 
-    fun clearEmailError(textInputLayout: TextInputLayout) {
-        if (textInputLayout.isErrorEnabled)
-            _emailState.value = InputState()
+    data class TwoErrors(
+        private val loginError: String,
+        private val passwordError: String
+    ) : LoginState() {
+
+        override fun handle(binding: FragmentLoginBinding) = with(binding) {
+            emailAddressTextInputLayout.show(true, loginError)
+            passwordTextInputLayout.show(true, passwordError)
+        }
     }
 
-    fun clearPasswordError(textInputLayout: TextInputLayout) {
-        if (textInputLayout.isErrorEnabled)
-            _passwordState.value = InputState()
+    data class LoginError(private val value: String) : LoginState() {
+        override fun handle(binding: FragmentLoginBinding) = with(binding) {
+            emailAddressTextInputLayout.show(true, value)
+        }
     }
-}
 
-class InputState(
-    private val containsError: Boolean = false,
-    private val errorMessage: String = ""
-) {
-    fun show(errorContainer: ErrorContainer) = errorContainer.show(containsError, errorMessage)
-}
+    data class PasswordError(private val value: String) : LoginState() {
+        override fun handle(binding: FragmentLoginBinding) = with(binding) {
+            passwordTextInputLayout.show(true, value)
+        }
+    }
 
-class ProgressState(private val visible: Boolean) {
-    fun apply(progressBar: ViewContainer, button: ViewContainer) {
-        progressBar.show(visible)
-        button.enable(!visible)
+    data class Success(private val value: WeatherUiModel) : LoginState() {
+        override fun handle(binding: FragmentLoginBinding) = with(binding) {
+            progressBar.show(false)
+            value.show(MySnackbar(Snackbar.make(binding.progressBar, "", Snackbar.LENGTH_SHORT)))
+        }
+    }
+
+    data class Error(private val value: WeatherUiModel) : LoginState() {
+        override fun handle(binding: FragmentLoginBinding) = with(binding) {
+            progressBar.show(false)
+            value.show(MySnackbar(Snackbar.make(binding.progressBar, "", Snackbar.LENGTH_SHORT)))
+        }
     }
 }

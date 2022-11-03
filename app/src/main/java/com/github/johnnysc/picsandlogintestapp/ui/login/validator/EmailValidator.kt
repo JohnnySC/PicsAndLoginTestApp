@@ -7,8 +7,12 @@ import com.github.johnnysc.picsandlogintestapp.core.UiValidator
  *
  * @author Asatryan on 31.03.21
  **/
-class EmailValidator(override val errorMessage: String) :
+class EmailValidator(private val errorMessage: String) :
     UiValidator {
+
+    override fun errorMessage(): String {
+        return errorMessage
+    }
 
     override fun isValid(text: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches();

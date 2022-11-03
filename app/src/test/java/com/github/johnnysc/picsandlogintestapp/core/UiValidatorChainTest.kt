@@ -29,7 +29,7 @@ class UiValidatorChainTest {
         )
 
         assertThat(chain.isValid("invalid"), `is`(false))
-        assertThat(chain.errorMessage, `is`("first error message"))
+        assertThat(chain.errorMessage(), `is`("first error message"))
     }
 
     @Test
@@ -40,7 +40,7 @@ class UiValidatorChainTest {
         )
 
         assertThat(chain.isValid("validOne"), `is`(false))
-        assertThat(chain.errorMessage, `is`("second error message"))
+        assertThat(chain.errorMessage(), `is`("second error message"))
     }
 
     @Test
@@ -67,7 +67,7 @@ class UiValidatorChainTest {
         )
 
         assertThat(chain.isValid("invalid"), `is`(false))
-        assertThat(chain.errorMessage, `is`("first error message"))
+        assertThat(chain.errorMessage(), `is`("first error message"))
     }
 
     @Test
@@ -81,7 +81,7 @@ class UiValidatorChainTest {
         )
 
         assertThat(chain.isValid("validOne"), `is`(false))
-        assertThat(chain.errorMessage, `is`("second error message"))
+        assertThat(chain.errorMessage(), `is`("second error message"))
     }
 
     @Test
@@ -95,13 +95,13 @@ class UiValidatorChainTest {
         )
 
         assertThat(chain.isValid("validOne"), `is`(false))
-        assertThat(chain.errorMessage, `is`("third error message"))
+        assertThat(chain.errorMessage(), `is`("third error message"))
     }
 
     private inner class TestUiValidator(
-        override val errorMessage: String,
+        errorMessage: String,
         private val validText: String
-    ) : UiValidator {
+    ) : UiValidator.Abstract(errorMessage) {
 
         override fun isValid(text: String): Boolean {
             return validText == text
